@@ -1,15 +1,14 @@
 #ifndef CAN_HPP
 #define CAN_HPP
 
-#define RX_PIN 5
-#define TX_PIN 2
+#define RX_PIN 13
+#define TX_PIN 14
 #define POLLING_RATE_MS 10
 #define TRANSMIT_RATE_MS 10
 
 #include "driver/twai.h"
 #include "common/common_libraries.hpp"
 #include "data_processor.hpp"
-#include "common/g24_telemetry_data.hpp"
 
 class CAN{
 public:
