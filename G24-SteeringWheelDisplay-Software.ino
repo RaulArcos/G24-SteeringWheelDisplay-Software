@@ -1,28 +1,18 @@
 #include "include/data_processor.hpp"
-#include "include/can_controller.hpp"
+#include "include/can.hpp"
 
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 
 DataProcessor dataProcessor;
-CANController canController;
+CAN canController;
 
 void setup() {
     Serial.begin(115200);
-
     canController.set_data_proccessor(&dataProcessor);
-
-    //Start CAN Controller
-    xTaskCreate(
-        CANController::listenTask,
-        "CANController",    
-        8192,              
-        &canController,              
-        1,                
-        NULL               
-    );
 }
 
 void loop(){ 
-    delay(10);
+    canController.listen();
+    vTaskDelay(10);
 }

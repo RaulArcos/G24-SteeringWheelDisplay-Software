@@ -1,19 +1,21 @@
-#ifndef CANCONTROLLER_HPP
-#define CANCONTROLLER_HPP
+#ifndef CAN_HPP
+#define CAN_HPP
 
 #define RX_PIN 5
-#define TX_PIN 4
+#define TX_PIN 2
 #define POLLING_RATE_MS 10
 #define TRANSMIT_RATE_MS 10
 
 #include "driver/twai.h"
 #include "common/common_libraries.hpp"
 #include "data_processor.hpp"
+#include "common/g24_telemetry_data.hpp"
 
-class CANController {
+class CAN{
 public:
-    CANController();
-    ~CANController();
+    CAN() = default;
+    ~CAN();
+    void start();
     void listen();
     void send_frame(twai_message_t message);
     twai_message_t createBoolMessage(bool b0, bool b1, bool b2, bool b3, bool b4, bool b5, bool b6, bool b7);
@@ -23,11 +25,11 @@ public:
     }
 
     static void listenTask(void *arg) {
-        CANController *controller = static_cast<CANController *>(arg);
+        CAN *controller = static_cast<CAN*>(arg);
         controller->listen();
         vTaskDelete(NULL); // Optionally delete the task if listen ever returns
     }
-    
+
 private:
     twai_message_t _rx_message;
     DataProcessor *_data_processor;
