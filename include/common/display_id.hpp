@@ -22,5 +22,6 @@
 #define CAN4_ID 0x69 //CAN_DIG#4
 #define CAN5_ID 0x70 //CAN_DIG#5
 #define CAN6_ID 0x71 //CAN_DIG#6
+#define TEMP_WARNING 0x72 //Warning de temperatura
 
 #endif
