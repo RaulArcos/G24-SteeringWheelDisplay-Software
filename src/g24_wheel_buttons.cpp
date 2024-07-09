@@ -153,6 +153,7 @@ void G24WheelButtons::update() {
     if (canController) {
         canController->send_frame(canController->createBoolMessage(buttonStateLevaIzq, buttonStateLevaDer, buttonStateB1, buttonStateB2, buttonStateB3, buttonStateB4, 0, 0));
     }
+    vTaskDelay(10)
 }
 
 void G24WheelButtons::set_can_controller(CAN *canController) {
