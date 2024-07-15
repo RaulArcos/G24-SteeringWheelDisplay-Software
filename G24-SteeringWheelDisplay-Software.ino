@@ -19,16 +19,14 @@ void setup() {
     wheelButtons.set_can_controller(&canController);
     wheelButtons.set_data_processor(&dataProcessor);
 
-    // ledStrip.display_startup();
-    // wheelButtons.begin();
+    ledStrip.display_startup();
+    wheelButtons.begin();
     canController.start();
-
-    // xTaskCreatePinnedToCore(G24WheelButtons::updateTask, "Wheel Buttons", 4096, &wheelButtons, 1, NULL, 0);
-    // xTaskCreatePinnedToCore(LedStrip::updateTask, "Led Strip", 4096, &ledStrip, 1, NULL, 0);
-    xTaskCreatePinnedToCore(CAN::listenTask, "CAN Listen", 4096, &canController, 1, NULL, 1);
-
-    
+    xTaskCreatePinnedToCore(G24WheelButtons::updateTask, "Wheel Buttons", 4096, &wheelButtons, 1, NULL, 0);
+    xTaskCreatePinnedToCore(LedStrip::updateTask, "Led Strip", 4096, &ledStrip, 1, NULL, 0);
 }
 
 void loop(){ 
+    canController.listen();
+    vTaskDelay(5);
 }
