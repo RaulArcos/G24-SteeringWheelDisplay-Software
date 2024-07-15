@@ -21,11 +21,16 @@ void DataProcessor::send_serial_frame_0(int rpmh, int rpml, int tpsh, int tpsl, 
     dato[6] = rpmh & 0xFF;
     dato[7] = rpml & 0xFF;
     Serial.write(dato, 8);
+    // _led_strip->set_rpm(rpmh*256 + rpml);
+
 
     dato[4] = TPS_ID;
     dato[6] = tpsh & 0xFF;
     dato[7] = tpsl & 0xFF;
     Serial.write(dato, 8);
+    Serial.println(tpsh*256 + tpsl);
+    _led_strip->set_rpm((tpsh*256 + tpsl)*10);
+
 
     dato[4] = BPS_ID;
     dato[6] = brkh & 0xFF;
@@ -85,6 +90,15 @@ void DataProcessor::send_serial_frame_2(int lambh, int lambl, int lamth, int lam
 
     dato[4] = IAT_ID;
     dato[6] = iat & 0xFF;
+    dato[7] = 0;
+    Serial.write(dato, 8);
+}
+
+void DataProcessor::send_serial_change_display(int display){
+    byte dato[8] = { 0x5A, 0xA5, 0x05, 0x82, 0x00, 0x00, 0x00, 0x00 };
+    const int displayIDs[] = { DISPLAY_0_ID, DISPLAY_1_ID, DISPLAY_2_ID, DISPLAY_3_ID, DISPLAY_4_ID };
+    dato[4] = displayIDs[display];
+    dato[6] = 0;
     dato[7] = 0;
     Serial.write(dato, 8);
 }

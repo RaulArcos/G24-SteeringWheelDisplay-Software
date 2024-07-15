@@ -15,19 +15,80 @@ void LedStrip::display_warning(int warning){
     }
 }
 
-void LedStrip::display_rpm(int rpm){
-    int rpm_leds = map(rpm, 0, 8000, 0, NUM_PIXELS);
-    for(int i = 0; i < rpm_leds; i++){
-        _ws2812b.setPixelColor(i, 0, 255, 0);
+void LedStrip::set_rpm(int rpm){
+    _rpm = rpm;
+}
+
+void LedStrip::display_rpm(int rpm) {
+    // Serial.println(rpm);
+    if (rpm > RPM_MAX) {
+        for (int i = 0; i < NUM_PIXELS; i++) {
+            _ws2812b.setPixelColor(i, _ws2812b.Color(255, 0, 0));
+        }
+        _ws2812b.show();
+        delay(50);
+        for (int i = 0; i < NUM_PIXELS; i++) {
+            _ws2812b.setPixelColor(i, 0);
+        }
+        _ws2812b.show();
+        delay(50);
+    } else {
+        int numLeds = map(rpm, RPM_MIN, RPM_MAX, 0, NUM_PIXELS);
+
+        for (int i = 0; i < NUM_PIXELS; i++) {
+            if (i < numLeds) {
+                if (i < NUM_PIXELS / 3) {
+                    _ws2812b.setPixelColor(i, _ws2812b.Color(0, 255, 0));
+                } else if (i < 2 * NUM_PIXELS / 3) {
+                    _ws2812b.setPixelColor(i, _ws2812b.Color(255, 255, 0));
+                } else {
+                    _ws2812b.setPixelColor(i, _ws2812b.Color(255, 0, 0));
+                }
+            } else {
+                _ws2812b.setPixelColor(i, 0);
+            }
+        }
+        _ws2812b.show();
     }
-    _ws2812b.show();
 }
 
 void LedStrip::display_startup(){
-    for(int i = 0; i < NUM_PIXELS; i++){
-        _ws2812b.setPixelColor(i, 0, 0, 255);
+    uint32_t colors[3] = { _ws2812b.Color(255, 0, 0), _ws2812b.Color(0, 255, 0), _ws2812b.Color(0, 0, 255) };
+
+    for (int pass = 0; pass < 3; pass++) {
+        for (int i = 0; i <= NUM_PIXELS - 4; i++) {
+            _ws2812b.clear();
+            _ws2812b.show();
+            for (int j = 0; j < 4; j++) {
+                _ws2812b.setPixelColor(i + j, colors[pass]);
+            }
+            _ws2812b.show();
+            delay(10);
+        }
+
+        for (int i = NUM_PIXELS - 4; i >= 0; i--) {
+            _ws2812b.clear();
+            _ws2812b.show();
+            for (int j = 0; j < 4; j++) {
+                _ws2812b.setPixelColor(i + j, colors[pass]);
+            }
+            _ws2812b.show();
+            delay(10); 
+        }
     }
+    _ws2812b.clear();
     _ws2812b.show();
 }
 
+void LedStrip::update(){
+    while(true){
+        if(_warning == 0){
+            display_rpm(_rpm);
+        }else if(_warning == STOP_CAR_WARNING){
+            display_warning(STOP_CAR_WARNING);
+        }
+        vTaskDelay(10);
+    
+    }
+}
 

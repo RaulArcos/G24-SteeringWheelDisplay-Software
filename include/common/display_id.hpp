@@ -1,6 +1,12 @@
 #ifndef DISPLAY_ID_HPP
 #define DISPLAY_ID_HPP 
-  
+
+#define DISPLAY_0_ID 0x00
+#define DISPLAY_1_ID 0x01
+#define DISPLAY_2_ID 0x02
+#define DISPLAY_3_ID 0x03
+#define DISPLAY_4_ID 0x04
+
 #define RPM_ID 0x51 //RPM
 #define ECT_IN_ID 0x52 //Temperatura entrada del radiador
 #define GEAR_ID 0x53 //Marcha
@@ -23,5 +29,7 @@
 #define CAN5_ID 0x70 //CAN_DIG#5
 #define CAN6_ID 0x71 //CAN_DIG#6
 #define TEMP_WARNING 0x72 //Warning de temperatura
+#define OIL_TEMP_ID 0x73 //Temperatura de aceite
+#define FUEL_PRESSURE_ID 0x74 //Presión de combustible
 
 #endif
