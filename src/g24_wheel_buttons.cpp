@@ -83,9 +83,8 @@ void G24WheelButtons::update() {
         checkButtonState(LEVA_IZQ_PIN, buttonStateLevaIzq, lastPressTimeLevaIzq, -1);
         checkButtonState(LEVA_DER_PIN, buttonStateLevaDer, lastPressTimeLevaDer, -1);
 
-        // if (canController) {
-        //     canController->send_frame(canController->createBoolMessage(buttonStateLevaIzq, buttonStateLevaDer, buttonStateB1, buttonStateB2, buttonStateB3, buttonStateB4, 0, 0));
-        // }
+        canController->send_frame(canController->createBoolMessage(buttonStateLevaIzq, buttonStateLevaDer, buttonStateB1, buttonStateB2, buttonStateB3, buttonStateB4, 0, 0));
+
         
         _led_strip->set_brightness(encoderCounterE1);
         // _data_processor->send_serial_change_display(displayCounter);

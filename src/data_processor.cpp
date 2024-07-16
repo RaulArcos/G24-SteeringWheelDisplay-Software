@@ -21,7 +21,7 @@ void DataProcessor::send_serial_frame_0(int rpmh, int rpml, int tpsh, int tpsl, 
     dato[6] = rpmh & 0xFF;
     dato[7] = rpml & 0xFF;
     Serial.write(dato, 8);
-    // _led_strip->set_rpm(rpmh*256 + rpml);
+    _led_strip->set_rpm(rpmh*256 + rpml);
 
 
     dato[4] = TPS_ID;
@@ -29,7 +29,7 @@ void DataProcessor::send_serial_frame_0(int rpmh, int rpml, int tpsh, int tpsl, 
     dato[7] = tpsl & 0xFF;
     Serial.write(dato, 8);
     Serial.println(tpsh*256 + tpsl);
-    _led_strip->set_rpm((tpsh*256 + tpsl)*10);
+    // _led_strip->set_rpm((tpsh*256 + tpsl)*10);
 
 
     dato[4] = BPS_ID;
