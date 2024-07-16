@@ -48,7 +48,7 @@ private:
     void handleCounterClockWise(gpio_num_t encoderPin);
     void checkButtonState(gpio_num_t buttonPin, volatile bool &buttonState, volatile unsigned long &lastPressTime, int ledPin);
 
-    static const unsigned long debounceTime = 50; // milliseconds
+    static const unsigned long debounceTime = 100; // milliseconds
     volatile unsigned long lastPressTimeB1;
     volatile unsigned long lastPressTimeB2;
     volatile unsigned long lastPressTimeB3;

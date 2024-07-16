@@ -70,13 +70,13 @@ void CAN::listen() {
             Serial.println();
             switch (_rx_message.data[0]) {
                 case 0:
-                    // _data_processor->send_serial_frame_0(_rx_message.data[1], _rx_message.data[2], _rx_message.data[3], _rx_message.data[4], _rx_message.data[5], _rx_message.data[6], _rx_message.data[7]);
+                    _data_processor->send_serial_frame_0(_rx_message.data[1], _rx_message.data[2], _rx_message.data[3], _rx_message.data[4], _rx_message.data[5], _rx_message.data[6], _rx_message.data[7]);
                     break;
                 case 1:
-                    // _data_processor->send_serial_frame_1(_rx_message.data[1], _rx_message.data[2], _rx_message.data[3], _rx_message.data[4], _rx_message.data[5], _rx_message.data[6], _rx_message.data[7]);
+                    _data_processor->send_serial_frame_1(_rx_message.data[1], _rx_message.data[2], _rx_message.data[3], _rx_message.data[4], _rx_message.data[5], _rx_message.data[6], _rx_message.data[7]);
                     break;
                 case 2:
-                    // _data_processor->send_serial_frame_2(_rx_message.data[1], _rx_message.data[2], _rx_message.data[3], _rx_message.data[4], _rx_message.data[5], _rx_message.data[6], _rx_message.data[7]);
+                    _data_processor->send_serial_frame_2(_rx_message.data[1], _rx_message.data[2], _rx_message.data[3], _rx_message.data[4], _rx_message.data[5], _rx_message.data[6], _rx_message.data[7]);
                     break;
                 default:
                     break;
