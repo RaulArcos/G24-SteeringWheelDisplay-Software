@@ -95,10 +95,8 @@ void DataProcessor::send_serial_frame_2(int lambh, int lambl, int lamth, int lam
 }
 
 void DataProcessor::send_serial_change_display(int display){
-    byte dato[8] = { 0x5A, 0xA5, 0x05, 0x82, 0x00, 0x00, 0x00, 0x00 };
+    byte dato[8] = { 0x5A, 0xA5, 0x03, 0x80, 0x03, 0x00};
     const int displayIDs[] = { DISPLAY_0_ID, DISPLAY_1_ID, DISPLAY_2_ID, DISPLAY_3_ID, DISPLAY_4_ID };
-    dato[4] = displayIDs[display];
-    dato[6] = 0;
-    dato[7] = 0;
-    Serial.write(dato, 8);
+    dato[5] = displayIDs[display];
+    Serial.write(dato, 6);
 }

@@ -91,17 +91,17 @@ void CAN::listen() {
         }
 
         // Check TWAI status
-        twai_status_info_t status_info;
-        twai_get_status_info(&status_info);
-        Serial.print("Bus Errors: ");
-        Serial.println(status_info.bus_error_count);
-        Serial.print("TX Errors: ");
-        Serial.println(status_info.tx_error_counter);
-        Serial.print("RX Errors: ");
-        Serial.println(status_info.rx_error_counter);
-        Serial.print("RX Missed: ");
-        Serial.println(status_info.rx_missed_count);
-        Serial.print("RX Overrun: ");
-        Serial.println(status_info.rx_overrun_count);
+        // twai_status_info_t status_info;
+        // twai_get_status_info(&status_info);
+        // Serial.print("Bus Errors: ");
+        // Serial.println(status_info.bus_error_count);
+        // Serial.print("TX Errors: ");
+        // Serial.println(status_info.tx_error_counter);
+        // Serial.print("RX Errors: ");
+        // Serial.println(status_info.rx_error_counter);
+        // Serial.print("RX Missed: ");
+        // Serial.println(status_info.rx_missed_count);
+        // Serial.print("RX Overrun: ");
+        // Serial.println(status_info.rx_overrun_count);
     }
 }

@@ -40,9 +40,9 @@ void LedStrip::display_rpm(int rpm) {
                 if (i < NUM_PIXELS / 3) {
                     _ws2812b.setPixelColor(i, _ws2812b.Color(0, 255, 0));
                 } else if (i < 2 * NUM_PIXELS / 3) {
-                    _ws2812b.setPixelColor(i, _ws2812b.Color(255, 255, 0));
-                } else {
                     _ws2812b.setPixelColor(i, _ws2812b.Color(255, 0, 0));
+                } else {
+                    _ws2812b.setPixelColor(i, _ws2812b.Color(0, 0, 255));
                 }
             } else {
                 _ws2812b.setPixelColor(i, 0);
@@ -63,7 +63,7 @@ void LedStrip::display_startup(){
                 _ws2812b.setPixelColor(i + j, colors[pass]);
             }
             _ws2812b.show();
-            delay(10);
+            delay(5);
         }
 
         for (int i = NUM_PIXELS - 4; i >= 0; i--) {
@@ -73,8 +73,21 @@ void LedStrip::display_startup(){
                 _ws2812b.setPixelColor(i + j, colors[pass]);
             }
             _ws2812b.show();
-            delay(10); 
+            delay(5); 
         }
+    }
+    _ws2812b.clear();
+    _ws2812b.show();
+    for(int pass=0; pass<20; pass++){
+        for(int i=0; i<NUM_PIXELS; i++){
+            _ws2812b.setPixelColor(i, _ws2812b.Color(17, 17, 245));
+        }
+        _ws2812b.show();
+        delay(10);
+        for(int i=0; i<NUM_PIXELS; i++){
+            _ws2812b.setPixelColor(i, _ws2812b.Color(245, 146, 17));
+        }
+        delay(10);
     }
     _ws2812b.clear();
     _ws2812b.show();
