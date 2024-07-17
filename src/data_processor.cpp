@@ -15,7 +15,7 @@ void DataProcessor::send_serial(byte type, unsigned int value) {                
     Serial.write(dato, 8);                                              //Se envía serialmente el mensaje, indicando su longituden bytes para ello.
 }
 
-void DataProcessor::send_serial_frame_0(int rpmh, int rpml, int tpsh, int tpsl, int brkh, int brkl, int gear){
+void DataProcessor::send_serial_frame_0(int rpmh, int rpml, int tpsh, int tpsl, int ecth, int ectl, int gear){
     byte dato[8] = { 0x5A, 0xA5, 0x05, 0x82, 0x00, 0x00, 0x00, 0x00 };
     dato[4] = RPM_ID;
     dato[6] = rpmh & 0xFF;
@@ -32,9 +32,9 @@ void DataProcessor::send_serial_frame_0(int rpmh, int rpml, int tpsh, int tpsl, 
     // _led_strip->set_rpm((tpsh*256 + tpsl)*10);
 
 
-    dato[4] = BPS_ID;
-    dato[6] = brkh & 0xFF;
-    dato[7] = brkl & 0xFF;
+    dato[4] = ECT_IN_ID;
+    dato[6] = ecth & 0xFF;
+    dato[7] = ectl & 0xFF;
     Serial.write(dato, 8);
 
     dato[4] = GEAR_ID;
@@ -43,7 +43,7 @@ void DataProcessor::send_serial_frame_0(int rpmh, int rpml, int tpsh, int tpsl, 
     Serial.write(dato, 8);
 }
 
-void DataProcessor::send_serial_frame_1(int lfws, int rfws, int lrws, int rrws, int maph, int mapl, int ect){
+void DataProcessor::send_serial_frame_1(int lfws, int rfws, int lrws, int rrws, int maph, int mapl, int brk){
     byte dato[8] = { 0x5A, 0xA5, 0x05, 0x82, 0x00, 0x00, 0x00, 0x00 };
     dato[4] = LF_WS_ID;
     dato[6] = lfws & 0xFF;
@@ -70,8 +70,8 @@ void DataProcessor::send_serial_frame_1(int lfws, int rfws, int lrws, int rrws, 
     dato[7] = mapl & 0xFF;
     Serial.write(dato, 8);
 
-    dato[4] = ECT_IN_ID;
-    dato[6] = ect & 0xFF;
+    dato[4] = BPS_ID;
+    dato[6] = brk & 0xFF;
     dato[7] = 0;
     Serial.write(dato, 8);
 }
@@ -95,8 +95,8 @@ void DataProcessor::send_serial_frame_2(int lambh, int lambl, int lamth, int lam
 }
 
 void DataProcessor::send_serial_change_display(int display){
-    byte dato[8] = { 0x5A, 0xA5, 0x03, 0x80, 0x03, 0x00};
+    byte dato[9] = { 0x5A, 0xA5, 0x07, 0x00, 0x84, 0x5A, 0x01, 0x00, 0x00};
     const int displayIDs[] = { DISPLAY_0_ID, DISPLAY_1_ID, DISPLAY_2_ID, DISPLAY_3_ID, DISPLAY_4_ID };
-    dato[5] = displayIDs[display];
-    Serial.write(dato, 6);
+    dato[8] = displayIDs[display];
+    Serial.write(dato, 9);
 }

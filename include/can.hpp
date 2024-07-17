@@ -3,16 +3,18 @@
 
 #define RX_PIN 13
 #define TX_PIN 14
-#define POLLING_RATE_MS 1000
-#define TRANSMIT_RATE_MS 50
+#define POLLING_RATE_MS 20
+#define TRANSMIT_RATE_MS 200
 
 #include "driver/twai.h"
 #include "common/common_libraries.hpp"
 #include "data_processor.hpp"
+#include "freertos/FreeRTOS.h"
+#include "freertos/semphr.h"
 
 class CAN {
 public:
-    CAN() = default;
+    CAN(): _mutex(xSemaphoreCreateMutex()) {}
     ~CAN();
     void start();
     void listen();
@@ -31,6 +33,7 @@ public:
 private:
     twai_message_t _rx_message;
     DataProcessor *_data_processor;
+    SemaphoreHandle_t _mutex;
 };
 
 #endif

@@ -31,6 +31,5 @@
 #define TEMP_WARNING 0x72 //Warning de temperatura
 #define OIL_TEMP_ID 0x73 //Temperatura de aceite
 #define FUEL_PRESSURE_ID 0x74 //Presión de combustible
-#define LAMBDA_TARGET 0x75 //Target Lambda 
 
 #endif

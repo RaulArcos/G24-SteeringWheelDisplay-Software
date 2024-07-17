@@ -58,21 +58,22 @@ void G24WheelButtons::checkButtonState(gpio_num_t buttonPin, volatile bool &butt
             if (ledPin != -1) {
                 digitalWrite(ledPin, HIGH);
             }
-            // Serial.print("Button Pressed: ");
-            // Serial.println(buttonPin);
-            if (buttonPin == B3_PIN) {
+            if(buttonPin == B1_PIN){
                 if(displayCounter < 4){
                     displayCounter++;
                 }else{
                     displayCounter = 0;
                 }
-            } else if (buttonPin == B4_PIN) {
+            }
+            if(buttonPin == B3_PIN){
                 if(displayCounter > 0){
                     displayCounter--;
                 }else{
                     displayCounter = 4;
                 }
-            }  
+            }
+            Serial.print("Button Pressed: ");
+            Serial.println(buttonPin);
         }
     } else if (currentState == HIGH && buttonState) { // Button released
         if (currentTime - lastPressTime > debounceTime) {
@@ -95,25 +96,16 @@ void G24WheelButtons::update() {
         checkButtonState(B4_PIN, buttonStateB4, lastPressTimeB4, B4_LED_PIN);
         checkButtonState(LEVA_IZQ_PIN, buttonStateLevaIzq, lastPressTimeLevaIzq, -1);
         checkButtonState(LEVA_DER_PIN, buttonStateLevaDer, lastPressTimeLevaDer, -1);
-
-        canController->send_frame(canController->createBoolMessage(buttonStateLevaIzq, buttonStateLevaDer, buttonStateB1, buttonStateB2, 0, 0, 0, 0));
-        _led_strip->set_brightness(encoderCounterE1);
+    
+        canController->send_frame(canController->createBoolMessage(buttonStateLevaIzq, buttonStateLevaDer, buttonStateB1, buttonStateB2, buttonStateB3, buttonStateB4, 0, 0));
         
-        if (displayCounter != lastDispayCounter) {
+        _led_strip->set_brightness(encoderCounterE1);
+        if (displayCounter != lastDispayCounter){
             _data_processor->send_serial_change_display(displayCounter);
             lastDispayCounter = displayCounter;
         }
-        // Serial.print(displayCounter);
-        // Serial.print(" ");
-        // Serial.println(lastDispayCounter);
 
-        // Serial.print("Encoder Counter E1: ");
-        // Serial.println(encoderCounterE1);
-
-        // Serial.print("Encoder Counter E2: ");
-        // Serial.println(displayCounter);
-
-        vTaskDelay(5);
+        vTaskDelay(10); // Slightly longer delay to ensure the system is not overloaded
     }
 }
 

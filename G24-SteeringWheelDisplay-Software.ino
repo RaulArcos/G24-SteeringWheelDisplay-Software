@@ -22,11 +22,11 @@ void setup() {
     ledStrip.display_startup();
     wheelButtons.begin();
     canController.start();
-    xTaskCreatePinnedToCore(G24WheelButtons::updateTask, "Wheel Buttons", 4096, &wheelButtons, 1, NULL, 0);
-    xTaskCreatePinnedToCore(LedStrip::updateTask, "Led Strip", 4096, &ledStrip, 1, NULL, 0);
+    xTaskCreate(wheelButtons.updateTask, "updateTask", 4096, &wheelButtons, 1, NULL);
 }
 
 void loop(){ 
     canController.listen();
+    ledStrip.update();
     vTaskDelay(5);
 }
