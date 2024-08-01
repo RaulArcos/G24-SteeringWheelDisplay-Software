@@ -58,22 +58,20 @@ void G24WheelButtons::checkButtonState(gpio_num_t buttonPin, volatile bool &butt
             if (ledPin != -1) {
                 digitalWrite(ledPin, HIGH);
             }
-            if(buttonPin == B1_PIN){
+            if(buttonPin == B2_PIN){
                 if(displayCounter < 4){
                     displayCounter++;
                 }else{
                     displayCounter = 0;
                 }
             }
-            if(buttonPin == B3_PIN){
-                if(displayCounter > 0){
-                    displayCounter--;
-                }else{
-                    displayCounter = 4;
-                }
-            }
-            Serial.print("Button Pressed: ");
-            Serial.println(buttonPin);
+            // if(buttonPin == B3_PIN){
+            //     if(displayCounter > 0){
+            //         displayCounter--;
+            //     }else{
+            //         displayCounter = 4;
+            //     }
+            // }
         }
     } else if (currentState == HIGH && buttonState) { // Button released
         if (currentTime - lastPressTime > debounceTime) {
@@ -97,7 +95,7 @@ void G24WheelButtons::update() {
         checkButtonState(LEVA_IZQ_PIN, buttonStateLevaIzq, lastPressTimeLevaIzq, -1);
         checkButtonState(LEVA_DER_PIN, buttonStateLevaDer, lastPressTimeLevaDer, -1);
     
-        canController->send_frame(canController->createBoolMessage(buttonStateLevaIzq, buttonStateLevaDer, buttonStateB1, buttonStateB2, buttonStateB3, buttonStateB4, 0, 0));
+        canController->send_frame(canController->createBoolMessage(buttonStateLevaIzq, buttonStateLevaDer, buttonStateB1, 0, buttonStateB3, buttonStateB4, 0, 0));
         
         _led_strip->set_brightness(encoderCounterE1);
         if (displayCounter != lastDispayCounter){
@@ -123,19 +121,19 @@ void G24WheelButtons::handleClockWise(gpio_num_t encoderPin) {
                 // Serial.println(encoderCounterE1);
             }
             break;
-        case E2_PIN_A:
-            encoderCounterE2++;
-            if( encoderCounterE2 % 5 == 0){
-                if (displayCounter <= 4){
-                    displayCounter++;
-                }else{
-                    displayCounter = 0;
-                }
-                // _data_processor->send_serial_change_display(displayCounter);
-                // Serial.print("display: ");
-                // Serial.println(displayCounter);
-            }
-            break;
+        // case E2_PIN_A:
+        //     encoderCounterE2++;
+        //     if( encoderCounterE2 % 5 == 0){
+        //         if (displayCounter <= 4){
+        //             displayCounter++;
+        //         }else{
+        //             displayCounter = 0;
+        //         }
+        //         // _data_processor->send_serial_change_display(displayCounter);
+        //         // Serial.print("display: ");
+        //         // Serial.println(displayCounter);
+        //     }
+        //     break;
     }
 }
 
@@ -149,19 +147,19 @@ void G24WheelButtons::handleCounterClockWise(gpio_num_t encoderPin) {
                 // Serial.println(encoderCounterE1);
             }
             break;
-        case E2_PIN_A:
-            encoderCounterE2--;
-            if( encoderCounterE2 % 5 == 0){
-                if (displayCounter > 0){
-                    displayCounter--;
-                }else{
-                    displayCounter = 4;
-                }
-                // _data_processor->send_serial_change_display(displayCounter);
-                // Serial.print("display: ");
-                // Serial.println(displayCounter);
-            }
-            break;
+        // case E2_PIN_A:
+        //     encoderCounterE2--;
+        //     if( encoderCounterE2 % 5 == 0){
+        //         if (displayCounter > 0){
+        //             displayCounter--;
+        //         }else{
+        //             displayCounter = 4;
+        //         }
+        //         // _data_processor->send_serial_change_display(displayCounter);
+        //         // Serial.print("display: ");
+        //         // Serial.println(displayCounter);
+        //     }
+        //     break;
     }
 }
 
