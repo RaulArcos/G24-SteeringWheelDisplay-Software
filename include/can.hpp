@@ -3,8 +3,8 @@
 
 #define RX_PIN 13
 #define TX_PIN 14
-#define POLLING_RATE_MS 20
-#define TRANSMIT_RATE_MS 200
+#define POLLING_RATE_MS 5
+#define TRANSMIT_RATE_MS 20
 
 #include "driver/twai.h"
 #include "common/common_libraries.hpp"
@@ -23,6 +23,10 @@ public:
 
     void set_data_proccessor(DataProcessor *data_processor) {
         _data_processor = data_processor;
+    }
+
+    SemaphoreHandle_t get_mutex() {
+        return _mutex;
     }
 
     static void listenTask(void *arg) {

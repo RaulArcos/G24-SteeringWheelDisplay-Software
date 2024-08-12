@@ -16,12 +16,11 @@ void LedStrip::display_warning(int warning){
 }
 
 void LedStrip::set_rpm(int rpm){
-    _rpm = rpm;
+    display_rpm(rpm);
 }
 
-void LedStrip::display_rpm(int rpm) {
-    // Serial.println(rpm);
-    if (rpm > RPM_MAX) {
+void LedStrip::display_rpm(int rpm){
+    if (rpm >= RPM_MAX) {
         for (int i = 0; i < NUM_PIXELS; i++) {
             _ws2812b.setPixelColor(i, _ws2812b.Color(255, 0, 0));
         }
@@ -53,6 +52,7 @@ void LedStrip::display_rpm(int rpm) {
 }
 
 void LedStrip::display_startup(){
+    _ws2812b.setBrightness(255);
     uint32_t colors[3] = { _ws2812b.Color(255, 0, 0), _ws2812b.Color(0, 255, 0), _ws2812b.Color(0, 0, 255) };
 
     for (int pass = 0; pass < 3; pass++) {

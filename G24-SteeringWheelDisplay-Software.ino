@@ -18,8 +18,9 @@ void setup() {
     wheelButtons.set_led_strip(&ledStrip);
     wheelButtons.set_can_controller(&canController);
     wheelButtons.set_data_processor(&dataProcessor);
+    ledStrip.set_mutex(canController.get_mutex());
 
-    ledStrip.display_startup();
+    // ledStrip.display_startup();
     wheelButtons.begin();
     canController.start();
     xTaskCreate(wheelButtons.updateTask, "updateTask", 4096, &wheelButtons, 1, NULL);
@@ -27,6 +28,6 @@ void setup() {
 
 void loop(){ 
     canController.listen();
-    ledStrip.update();
     vTaskDelay(5);
+    
 }

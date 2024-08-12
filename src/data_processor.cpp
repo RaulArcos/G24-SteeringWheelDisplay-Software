@@ -28,9 +28,9 @@ void DataProcessor::send_serial_frame_0(int rpmh, int rpml, int tpsh, int tpsl, 
     dato[6] = tpsh & 0xFF;
     dato[7] = tpsl & 0xFF;
     Serial.write(dato, 8);
-    Serial.println(tpsh*256 + tpsl);
-    // _led_strip->set_rpm((tpsh*256 + tpsl)*10);
-
+    // Serial.println(tpsh*256 + tpsl);
+    // _led_strip->set_rpm((tpsh*256 + tpsl));
+    // Serial.println(tpsh*256 + tpsl);
 
     dato[4] = ECT_IN_ID;
     dato[6] = ecth & 0xFF;
@@ -43,36 +43,16 @@ void DataProcessor::send_serial_frame_0(int rpmh, int rpml, int tpsh, int tpsl, 
     Serial.write(dato, 8);
 }
 
-void DataProcessor::send_serial_frame_1(int lfws, int rfws, int lrws, int rrws, int maph, int mapl, int brk){
+void DataProcessor::send_serial_frame_1(int brkh, int brkl, int lrws, int rrws, int maph, int mapl, int brk){
     byte dato[8] = { 0x5A, 0xA5, 0x05, 0x82, 0x00, 0x00, 0x00, 0x00 };
-    dato[4] = LF_WS_ID;
-    dato[6] = lfws & 0xFF;
-    dato[7] = 0;
-    Serial.write(dato, 8);
-
-    dato[4] = RF_WS_ID;
-    dato[6] = rfws & 0xFF; 
-    dato[7] = 0;
-    Serial.write(dato, 8);
-
-    dato[4] = LR_WS_ID;
-    dato[6] = lrws & 0xFF;
-    dato[7] = 0;
-    Serial.write(dato, 8);
-
-    dato[4] = RR_WS_ID;
-    dato[6] = rrws & 0xFF;
-    dato[7] = 0;
-    Serial.write(dato, 8);
-
     dato[4] = MAP_ID;
     dato[6] = maph & 0xFF;
     dato[7] = mapl & 0xFF;
     Serial.write(dato, 8);
 
     dato[4] = BPS_ID;
-    dato[6] = brk & 0xFF;
-    dato[7] = 0;
+    dato[6] = brkh & 0xFF;
+    dato[6] = brkl & 0xFF;
     Serial.write(dato, 8);
 }
 

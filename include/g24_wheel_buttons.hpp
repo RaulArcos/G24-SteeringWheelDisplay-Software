@@ -28,6 +28,9 @@
 #define E2_PIN_A GPIO_NUM_36
 #define E2_PIN_B GPIO_NUM_35
 
+#define E1_BUTTON_PIN GPIO_NUM_12
+#define E2_BUTTON_PIN GPIO_NUM_34
+
 class G24WheelButtons {
 public:
     G24WheelButtons();
@@ -55,6 +58,8 @@ private:
     volatile unsigned long lastPressTimeB4;
     volatile unsigned long lastPressTimeLevaIzq;
     volatile unsigned long lastPressTimeLevaDer;
+    volatile unsigned long lastPressTimeE1;
+    volatile unsigned long lastPressTimeE2;
     volatile unsigned long lastTurnTimeE1;
     volatile unsigned long lastTurnTimeE2;
 
@@ -66,9 +71,14 @@ private:
     volatile bool buttonStateLevaDer;
     volatile int encoderCounterE1;
     volatile int encoderCounterE2;
+    volatile bool buttonStateE1;
+    volatile bool buttonStateE2;
 
     volatile int displayCounter;
     volatile int lastDispayCounter;
+
+    volatile int brightnessCounter;
+    volatile int lastBrightnessCounter;
 
     volatile int lastPin_A_StateE1;
     volatile int lastPin_A_StateE2;

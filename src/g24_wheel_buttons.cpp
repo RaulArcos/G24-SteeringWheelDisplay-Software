@@ -6,7 +6,7 @@ G24WheelButtons::G24WheelButtons()
     buttonStateB1(false), buttonStateB2(false), buttonStateB3(false), buttonStateB4(false),
     buttonStateLevaIzq(false), buttonStateLevaDer(false), canController(nullptr), lastTurnTimeE1(255), lastTurnTimeE2(0),
     encoderCounterE1(255), encoderCounterE2(0),
-    lastPin_A_StateE1(255), lastPin_A_StateE2(0), displayCounter(0), lastDispayCounter(0) {}
+    lastPin_A_StateE1(255), lastPin_A_StateE2(0), displayCounter(0), lastDispayCounter(0), brightnessCounter(0), lastBrightnessCounter(0), lastPressTimeE1(0), lastPressTimeE2(0), buttonStateE1(false), buttonStateE2(false) {}
 
 void G24WheelButtons::begin() {
     pinMode(B1_PIN, INPUT_PULLUP);
@@ -24,9 +24,13 @@ void G24WheelButtons::begin() {
     pinMode(E1_PIN_B, INPUT);
     pinMode(E2_PIN_A, INPUT);
     pinMode(E2_PIN_B, INPUT);
+    pinMode(E1_BUTTON_PIN, INPUT_PULLUP);
+    pinMode(E2_BUTTON_PIN, INPUT_PULLUP);
 
-    attachInterruptArg(digitalPinToInterrupt(E1_PIN_A), handleEncoderInterrupt, this, CHANGE);
-    attachInterruptArg(digitalPinToInterrupt(E2_PIN_A), handleEncoderInterrupt, this, CHANGE);
+    
+
+    // attachInterruptArg(digitalPinToInterrupt(E1_PIN_A), handleEncoderInterrupt, this, CHANGE);
+    // attachInterruptArg(digitalPinToInterrupt(E2_PIN_A), handleEncoderInterrupt, this, CHANGE);
 }
 
 void IRAM_ATTR G24WheelButtons::handleEncoderInterrupt(void* arg) {
@@ -65,13 +69,19 @@ void G24WheelButtons::checkButtonState(gpio_num_t buttonPin, volatile bool &butt
                     displayCounter = 0;
                 }
             }
-            // if(buttonPin == B3_PIN){
-            //     if(displayCounter > 0){
-            //         displayCounter--;
-            //     }else{
-            //         displayCounter = 4;
-            //     }
-            // }
+            if(buttonPin == LEVA_IZQ_PIN){
+               Serial.println("LEVA IZQ");
+            }
+            if(buttonPin == LEVA_DER_PIN){
+               Serial.println("LEVA DER");
+            }
+            if(buttonPin == E1_BUTTON_PIN){
+                if(brightnessCounter < 2){
+                    brightnessCounter++;
+                }else{
+                    brightnessCounter = 0;
+                }
+            }
         }
     } else if (currentState == HIGH && buttonState) { // Button released
         if (currentTime - lastPressTime > debounceTime) {
@@ -94,16 +104,33 @@ void G24WheelButtons::update() {
         checkButtonState(B4_PIN, buttonStateB4, lastPressTimeB4, B4_LED_PIN);
         checkButtonState(LEVA_IZQ_PIN, buttonStateLevaIzq, lastPressTimeLevaIzq, -1);
         checkButtonState(LEVA_DER_PIN, buttonStateLevaDer, lastPressTimeLevaDer, -1);
+        checkButtonState(E1_BUTTON_PIN, buttonStateE1, lastPressTimeE1, -1);
     
-        canController->send_frame(canController->createBoolMessage(buttonStateLevaIzq, buttonStateLevaDer, buttonStateB1, 0, buttonStateB3, buttonStateB4, 0, 0));
+        canController->send_frame(canController->createBoolMessage(0, 1, buttonStateB1, 1, buttonStateB3, buttonStateB4, 1, 1));
         
-        _led_strip->set_brightness(encoderCounterE1);
+        if(brightnessCounter != lastBrightnessCounter){
+            switch(brightnessCounter){
+                case 0:
+                    _led_strip->set_brightness(255);
+                    break;
+                case 1:
+                    _led_strip->set_brightness(140);
+                    break;
+                case 2:
+                    _led_strip->set_brightness(70);
+                    break;
+            }
+            lastBrightnessCounter = brightnessCounter;
+        }
+        // Serial.print("brillo: ");
+        // Serial.println(brightnessCounter);
+
         if (displayCounter != lastDispayCounter){
             _data_processor->send_serial_change_display(displayCounter);
             lastDispayCounter = displayCounter;
         }
 
-        vTaskDelay(10); // Slightly longer delay to ensure the system is not overloaded
+        vTaskDelay(20); // Slightly longer delay to ensure the system is not overloaded
     }
 }
 
@@ -143,8 +170,8 @@ void G24WheelButtons::handleCounterClockWise(gpio_num_t encoderPin) {
             if(encoderCounterE1 >= 10){
                 encoderCounterE1-=10;
                 // _led_strip->set_brightness(encoderCounterE1);
-                // Serial.print("brillo: ");
-                // Serial.println(encoderCounterE1);
+                Serial.print("brillo: ");
+                Serial.println(encoderCounterE1);
             }
             break;
         // case E2_PIN_A:
@@ -164,6 +191,7 @@ void G24WheelButtons::handleCounterClockWise(gpio_num_t encoderPin) {
 }
 
 void G24WheelButtons::updateTask(void *arg) {
+    vTaskDelay(2000);
     G24WheelButtons *wheelButtons = static_cast<G24WheelButtons*>(arg);
     wheelButtons->update();
     vTaskDelete(NULL);

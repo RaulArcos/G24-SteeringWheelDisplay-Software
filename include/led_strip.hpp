@@ -34,12 +34,17 @@ public:
         _ws2812b.show();
     }
 
+    void set_mutex(SemaphoreHandle_t mutex){
+        _mutex = mutex;
+    }
+
     void display_warning(int warning);
     void display_rpm(int rpm);
     void display_startup();
 
 private:
     Adafruit_NeoPixel _ws2812b;
+    SemaphoreHandle_t _mutex;
     int _rpm;
     int _warning;
     int _brightness;
